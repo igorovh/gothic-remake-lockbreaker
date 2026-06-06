@@ -501,7 +501,7 @@
         </div>
         <div>
           <label for="plateCount">Plates</label>
-          <input id="plateCount" type="number" step="1" value="5" inputmode="numeric" />
+          <input id="plateCount" type="number" min="1" max="6" step="1" value="5" inputmode="numeric" />
         </div>
       </div>
 
@@ -966,7 +966,10 @@
 
     function updatePlateCountFromInput() {
       const parsed = Number(plateCount.value);
-      if (!Number.isFinite(parsed)) return;
+      if (!Number.isFinite(parsed)) {
+        plateCount.value = String(state.n);
+        return;
+      }
 
       state.n = Math.max(MIN_PLATES, Math.min(MAX_PLATES, Math.trunc(parsed)));
       plateCount.value = String(state.n);
@@ -989,9 +992,6 @@
 
     document.getElementById("shareBtn").addEventListener("click", createShareLink);
     document.getElementById("resetBtn").addEventListener("click", resetAll);
-
-    plateCount.min = String(MIN_PLATES);
-    plateCount.max = String(MAX_PLATES);
 
     initRepoLinks();
     loadGitHubStars();
