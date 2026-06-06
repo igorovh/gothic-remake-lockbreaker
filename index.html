@@ -972,7 +972,7 @@
       clearShareMessage();
     }
 
-    plateCount.addEventListener("input", updatePlateCountFromInput);
+    plateCount.addEventListener("change", updatePlateCountFromInput);
 
     lockName.addEventListener("input", () => {
       state.name = lockName.value.trim();
