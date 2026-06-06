@@ -355,6 +355,119 @@
       margin-top: 8px;
     }
 
+
+    @media (max-width: 600px) {
+      html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
+
+      header {
+        padding: 22px 10px 12px;
+      }
+
+      .logo {
+        font-size: clamp(2.05rem, 10vw, 2.8rem);
+        line-height: 1.05;
+      }
+
+      .subtitle {
+        font-size: .95rem;
+        line-height: 1.42;
+      }
+
+      main {
+        padding: 10px 8px 34px;
+        gap: 12px;
+      }
+
+      .card {
+        padding: 12px;
+        border-radius: 16px;
+        overflow: hidden;
+      }
+
+      .card h2 {
+        font-size: 1.08rem;
+      }
+
+      .top-controls {
+        gap: 8px;
+      }
+
+      label {
+        font-size: .9rem;
+      }
+
+      input, select {
+        padding: 10px 11px;
+      }
+
+      .hint {
+        font-size: .88rem;
+        line-height: 1.38;
+      }
+
+      .plate-row {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        padding: 8px;
+      }
+
+      .plate-name {
+        font-size: .98rem;
+      }
+
+      .position-buttons {
+        grid-template-columns: repeat(7, minmax(0, 1fr));
+        gap: 4px;
+      }
+
+      .pos-btn {
+        padding: 8px 0;
+        min-width: 0;
+        font-size: .88rem;
+        border-radius: 10px;
+      }
+
+      .matrix-wrap {
+        margin: 0 -4px;
+        padding: 0 4px 4px;
+      }
+
+      table {
+        min-width: 560px;
+        border-spacing: 5px;
+      }
+
+      .relation {
+        min-width: 66px;
+        padding: 8px 3px;
+      }
+
+      .solve-btn {
+        padding: 13px;
+      }
+
+      .button-row {
+        gap: 7px;
+      }
+
+      .button-row .button,
+      .button-row button {
+        padding: 10px 12px;
+      }
+
+      .support-card p {
+        font-size: .92rem;
+      }
+
+      .disclaimer {
+        font-size: .78rem;
+        padding: 0 6px;
+      }
+    }
+
     @media (min-width: 860px) {
       main {
         grid-template-columns: .9fr 1.1fr;
@@ -405,7 +518,7 @@
       </div>
 
       <p class="hint">
-        Plate 1 is the bottom plate. Use <b>-3</b> for far left, <b>0</b> for center, <b>+3</b> for far right.
+        Plate 1 is the bottom plate, so the list below is shown from top to bottom. Use <b>-3</b> for far left, <b>0</b> for center, <b>+3</b> for far right.
         Goal: all plates at <b>0</b>. Left move increases position by <b>+1</b>, right move decreases it by <b>-1</b>.
       </p>
 
@@ -554,7 +667,7 @@
     function renderPlates() {
       platesEl.innerHTML = "";
 
-      for (let i = 1; i <= state.n; i++) {
+      for (let i = state.n; i >= 1; i--) {
         const row = document.createElement("div");
         row.className = "plate-row";
 
