@@ -4,19 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Gothic Remake Lockbreaker – Lockpicking Puzzle Solver</title>
-  <meta name="description" content="Free mobile-friendly lockpicking puzzle solver for Gothic Remake. Enter plate positions, define interactions, solve the lock, and share setups with a link." />
+  <title>Gothic Remake Lockpick Solver - Solve Lockpicking Puzzles Online</title>
+  <meta name="description" content="Free Gothic Remake lockpick solver. Solve lockpicking puzzles instantly by entering plate positions and interactions. Supports 1-7 plate locks." />
   <meta name="theme-color" content="#130e0a" />
 
   <!-- Open Graph / social preview -->
-  <meta property="og:title" content="Gothic Remake Lockbreaker" />
-  <meta property="og:description" content="Free lockpicking puzzle solver for Gothic Remake." />
+  <meta property="og:title" content="Gothic Remake Lockpick Solver" />
+  <meta property="og:description" content="Solve Gothic Remake lockpicking puzzles instantly. Supports 1-7 plate locks." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://gothic-remake-lockbreaker.com/" />
   <meta property="og:image" content="https://gothic-remake-lockbreaker.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Gothic Remake Lockbreaker" />
-  <meta name="twitter:description" content="Free lockpicking puzzle solver for Gothic Remake." />
+  <meta name="twitter:title" content="Gothic Remake Lockpick Solver" />
+  <meta name="twitter:description" content="Solve Gothic Remake lockpicking puzzles instantly. Supports 1-7 plate locks." />
   <meta name="twitter:image" content="https://gothic-remake-lockbreaker.com/og-image.png" />
 
   <!-- Inline SVG favicon -->
@@ -310,6 +310,27 @@
       padding: 14px;
       min-height: 90px;
       line-height: 1.45;
+      user-select: none;
+    }
+
+    .step {
+      cursor: pointer;
+      padding: 2px 0;
+      transition: opacity 0.15s, text-decoration 0.15s;
+    }
+
+    .step + .step {
+      margin-top: 8px;
+    }
+
+    .step.done {
+      text-decoration: line-through;
+      opacity: 0.4;
+    }
+
+    .step.done::before {
+      content: "✓ ";
+      color: var(--ok);
     }
 
     .success { color: var(--ok); font-weight: 800; }
@@ -337,6 +358,19 @@
       color: var(--accent-2);
       font-weight: 900;
       margin-top: 10px;
+    }
+
+    .faq-card h3 {
+      margin: 14px 0 6px;
+      color: var(--text);
+      font-size: 1rem;
+    }
+
+    .faq-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.5;
+      font-size: .94rem;
     }
 
     .disclaimer {
@@ -487,7 +521,7 @@
   <header>
     <div class="logo">🔓 Gothic Remake Lockbreaker</div>
     <p class="subtitle">
-      Solve Gothic Remake lockpicking puzzles instantly. Set the plate positions, define how plates affect each other, and get the shortest valid sequence of moves.
+      Free Gothic Remake lockpick solver. Enter the plate positions and interactions to find the shortest valid solution in seconds.
     </p>
   </header>
 
@@ -533,8 +567,35 @@
       <div class="button-row">
         <button class="secondary" id="shareBtn">Create share link</button>
         <button class="secondary" id="resetBtn">Reset</button>
+        <button class="secondary" id="copyBtn" style="display:none">Copy solution</button>
       </div>
       <div id="shareInfo" class="small-note"></div>
+    </section>
+
+    <section class="card faq-card span-2">
+      <h2>FAQ</h2>
+
+      <h3>How do I solve lockpicking puzzles in Gothic Remake?</h3>
+      <p>
+        Enter the plate positions and interactions into the Gothic Remake lockpick solver.
+        The tool calculates the shortest valid sequence of moves automatically.
+      </p>
+
+      <h3>Does this solver work for 7-plate locks?</h3>
+      <p>
+        Yes. The solver supports Gothic Remake lockpicking puzzles with 1 to 7 plates.
+      </p>
+
+      <h3>What do "Same" and "Opp." mean?</h3>
+      <p>
+        "Same" means the affected plate moves in the same direction as the moved plate.
+        "Opp." means it moves in the opposite direction.
+      </p>
+
+      <h3>Is this an official Gothic Remake tool?</h3>
+      <p>
+        No. Gothic Remake Lockbreaker is a fan-made lockpicking puzzle solver.
+      </p>
     </section>
 
     <section class="span-2 disclaimer">
@@ -823,11 +884,10 @@
 
       solution.moves.forEach((move, idx) => {
         const dir = move.direction === "left" ? "Left" : "Right";
-        lines.push(`Plate ${move.plate} → ${dir}`);
+        lines.push(`<div class="step" data-idx="${idx}">Plate ${move.plate} → ${dir}</div>`);
       });
 
       lines.push("");
-      lines.push("Final state: " + solution.states[solution.states.length - 1].map((v, i) => `${i+1}=${v}`).join(", "));
 
       state.lastMoves = solution.moves
         .map((move) => `Plate ${move.plate} -> ${move.direction === "left" ? "Left" : "Right"}`)
@@ -943,6 +1003,7 @@
       state.effects = fresh.effects;
       state.lastMoves = "";
       resultEl.innerHTML = "Enter lock data and press Solve.";
+      document.getElementById("copyBtn").style.display = "none";
       shareInfo.textContent = "";
       history.replaceState(null, "", location.pathname);
       render();
@@ -977,7 +1038,34 @@
       state.name = lockName.value.trim();
       const solution = solve();
       resultEl.innerHTML = formatSolution(solution);
+      document.getElementById("copyBtn").style.display = "";
     });
+
+    resultEl.addEventListener("click", (e) => {
+      const step = e.target.closest(".step");
+      if (step) step.classList.toggle("done");
+    });
+
+    document.getElementById("copyBtn").addEventListener("click", () => {
+      navigator.clipboard.writeText(state.lastMoves).then(() => {
+        const btn = document.getElementById("copyBtn");
+        btn.textContent = "Copied!";
+        setTimeout(() => { btn.textContent = "Copy solution"; }, 1500);
+      });
+    });
+
+    let dragMarking = false;
+    resultEl.addEventListener("mousedown", (e) => {
+      if (e.target.closest(".step")) dragMarking = true;
+    });
+
+    resultEl.addEventListener("mouseover", (e) => {
+      if (!dragMarking) return;
+      const step = e.target.closest(".step");
+      if (step) step.classList.add("done");
+    });
+
+    document.addEventListener("mouseup", () => { dragMarking = false; });
 
     document.getElementById("shareBtn").addEventListener("click", createShareLink);
     document.getElementById("resetBtn").addEventListener("click", resetAll);
