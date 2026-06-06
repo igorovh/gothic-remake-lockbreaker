@@ -963,13 +963,16 @@
     }
 
     function updatePlateCountFromInput() {
-      state.n = Number(plateCount.value);
+      const parsed = Number(plateCount.value);
+      if (!Number.isFinite(parsed)) return;
+
+      state.n = Math.max(1, Math.min(6, Math.trunc(parsed)));
+      plateCount.value = String(state.n);
       render();
       clearShareMessage();
     }
 
     plateCount.addEventListener("input", updatePlateCountFromInput);
-    plateCount.addEventListener("change", updatePlateCountFromInput);
 
     lockName.addEventListener("input", () => {
       state.name = lockName.value.trim();
