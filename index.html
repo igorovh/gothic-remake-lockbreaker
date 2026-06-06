@@ -4,19 +4,19 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Gothic Remake Lockpick Solver - Solve Lockpicking Puzzles Online</title>
-  <meta name="description" content="Free Gothic Remake lockpick solver. Solve lockpicking puzzles instantly by entering plate positions and interactions. Supports 1-7 plate locks." />
+  <title>Gothic Remake Lockbreaker – Lockpicking Puzzle Solver</title>
+  <meta name="description" content="Free mobile-friendly lockpicking puzzle solver for Gothic Remake. Enter plate positions, define interactions, solve the lock, and share setups with a link." />
   <meta name="theme-color" content="#130e0a" />
 
   <!-- Open Graph / social preview -->
-  <meta property="og:title" content="Gothic Remake Lockpick Solver" />
-  <meta property="og:description" content="Solve Gothic Remake lockpicking puzzles instantly. Supports 1-7 plate locks." />
+  <meta property="og:title" content="Gothic Remake Lockbreaker" />
+  <meta property="og:description" content="Free lockpicking puzzle solver for Gothic Remake." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://gothic-remake-lockbreaker.com/" />
   <meta property="og:image" content="https://gothic-remake-lockbreaker.com/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Gothic Remake Lockpick Solver" />
-  <meta name="twitter:description" content="Solve Gothic Remake lockpicking puzzles instantly. Supports 1-7 plate locks." />
+  <meta name="twitter:title" content="Gothic Remake Lockbreaker" />
+  <meta name="twitter:description" content="Free lockpicking puzzle solver for Gothic Remake." />
   <meta name="twitter:image" content="https://gothic-remake-lockbreaker.com/og-image.png" />
 
   <!-- Inline SVG favicon -->
@@ -339,19 +339,6 @@
       margin-top: 10px;
     }
 
-    .faq-card h3 {
-      margin: 14px 0 6px;
-      color: var(--text);
-      font-size: 1rem;
-    }
-
-    .faq-card p {
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.5;
-      font-size: .94rem;
-    }
-
     .disclaimer {
       font-size: .82rem;
       color: var(--muted);
@@ -483,7 +470,7 @@
 
     @media (min-width: 860px) {
       main {
-        grid-template-columns: .9fr 1.1fr;
+        grid-template-columns: 1.3fr 0.7fr;
       }
 
       .span-2 {
@@ -500,7 +487,7 @@
   <header>
     <div class="logo">🔓 Gothic Remake Lockbreaker</div>
     <p class="subtitle">
-      Free Gothic Remake lockpick solver. Enter the plate positions and interactions to find the shortest valid solution in seconds.
+      Solve Gothic Remake lockpicking puzzles instantly. Set the plate positions, define how plates affect each other, and get the shortest valid sequence of moves.
     </p>
   </header>
 
@@ -514,15 +501,7 @@
         </div>
         <div>
           <label for="plateCount">Plates</label>
-          <select id="plateCount">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option selected>5</option>
-            <option>6</option>
-            <option>7</option>
-          </select>
+          <input type="number" id="plateCount" min="1" max="20" value="5" />
         </div>
       </div>
 
@@ -556,32 +535,6 @@
         <button class="secondary" id="resetBtn">Reset</button>
       </div>
       <div id="shareInfo" class="small-note"></div>
-    </section>
-
-    <section class="card faq-card span-2">
-      <h2>FAQ</h2>
-
-      <h3>How do I solve lockpicking puzzles in Gothic Remake?</h3>
-      <p>
-        Enter the plate positions and interactions into the Gothic Remake lockpick solver.
-        The tool calculates the shortest valid sequence of moves automatically.
-      </p>
-
-      <h3>Does this solver work for 7-plate locks?</h3>
-      <p>
-        Yes. The solver supports Gothic Remake lockpicking puzzles with 1 to 7 plates.
-      </p>
-
-      <h3>What do “Same” and “Opp.” mean?</h3>
-      <p>
-        “Same” means the affected plate moves in the same direction as the moved plate.
-        “Opp.” means it moves in the opposite direction.
-      </p>
-
-      <h3>Is this an official Gothic Remake tool?</h3>
-      <p>
-        No. Gothic Remake Lockbreaker is a fan-made lockpicking puzzle solver.
-      </p>
     </section>
 
     <section class="span-2 disclaimer">
@@ -659,7 +612,7 @@
     }
 
     function normalizeStateForN() {
-      state.n = Math.max(1, Math.min(7, Number(state.n) || 5));
+      state.n = Math.max(1, Math.min(20, Number(state.n) || 5));
 
       for (let i = 1; i <= state.n; i++) {
         if (state.start[i] === undefined) state.start[i] = 0;
@@ -870,14 +823,14 @@
 
       solution.moves.forEach((move, idx) => {
         const dir = move.direction === "left" ? "Left" : "Right";
-        lines.push(`${String(idx + 1).padStart(2, " ")}. Plate ${move.plate} → ${dir}`);
+        lines.push(`Plate ${move.plate} → ${dir}`);
       });
 
       lines.push("");
       lines.push("Final state: " + solution.states[solution.states.length - 1].map((v, i) => `${i+1}=${v}`).join(", "));
 
       state.lastMoves = solution.moves
-        .map((move, idx) => `${idx + 1}. Plate ${move.plate} -> ${move.direction === "left" ? "Left" : "Right"}`)
+        .map((move) => `Plate ${move.plate} -> ${move.direction === "left" ? "Left" : "Right"}`)
         .join("\n");
 
       return lines.join("\n");
@@ -914,7 +867,7 @@
 
     function loadCompactSetup(payload) {
       if (!payload || payload.v !== 1) throw new Error("Unsupported setup format.");
-      if (!Number.isInteger(payload.n) || payload.n < 1 || payload.n > 7) throw new Error("Invalid plate count.");
+      if (!Number.isInteger(payload.n) || payload.n < 1 || payload.n > 20) throw new Error("Invalid plate count.");
 
       state.n = payload.n;
       state.name = typeof payload.name === "string" ? payload.name.slice(0, 80) : "";
