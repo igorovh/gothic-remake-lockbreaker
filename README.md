@@ -1,11 +1,9 @@
-# Gothic Remake Lockbreaker
+# Gothic Remake Lockpick Solver
 
-Free lockpicking puzzle solver for Gothic Remake.
+Free online lockpicking puzzle solver for Gothic Remake.
 
-🔓 Launch App:
+🔓 Launch App:  
 https://gothic-remake-lockbreaker.com
-
-⭐ Star this repository if it helped you.
 
 ---
 
@@ -17,8 +15,8 @@ https://gothic-remake-lockbreaker.com
 
 ## Features
 
-- Supports 1–6 plates
-- Finds the shortest solution
+- Supports 1-7 plate locks
+- Finds the shortest valid solution
 - Mobile friendly
 - Shareable lock URLs
 - Runs entirely in your browser
@@ -28,10 +26,22 @@ https://gothic-remake-lockbreaker.com
 
 ## How to use
 
-1. Select number of plates
+1. Select the number of plates
 2. Set plate positions
-3. Define interactions
-4. Click Solve Lock
+3. Define plate interactions
+4. Click **Solve Lock**
+
+---
+
+## Keywords
+
+- Gothic Remake lockpick solver
+- Gothic Remake lockpicking puzzle solver
+- Gothic Remake lock solution
+- Gothic Remake lock helper
+- Gothic Remake lockpicking guide
+- Gothic Remake lock breaker
+- Gothic Remake lock puzzle solver
 
 ---
 
