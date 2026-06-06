@@ -501,7 +501,7 @@
         </div>
         <div>
           <label for="plateCount">Plates</label>
-          <input id="plateCount" type="number" min="1" max="6" step="1" value="5" inputmode="numeric" />
+          <input id="plateCount" type="number" step="1" value="5" inputmode="numeric" />
         </div>
       </div>
 
@@ -559,6 +559,8 @@
 
     const MIN = -3;
     const MAX = 3;
+    const MIN_PLATES = 1;
+    const MAX_PLATES = 6;
     const POSITIONS = [-3, -2, -1, 0, 1, 2, 3];
 
     const defaultState = () => ({
@@ -612,7 +614,7 @@
     }
 
     function normalizeStateForN() {
-      state.n = Math.max(1, Math.min(6, Number(state.n) || 5));
+      state.n = Math.max(MIN_PLATES, Math.min(MAX_PLATES, Number(state.n) || 5));
 
       for (let i = 1; i <= state.n; i++) {
         if (state.start[i] === undefined) state.start[i] = 0;
@@ -867,7 +869,7 @@
 
     function loadCompactSetup(payload) {
       if (!payload || payload.v !== 1) throw new Error("Unsupported setup format.");
-      if (!Number.isInteger(payload.n) || payload.n < 1 || payload.n > 6) throw new Error("Invalid plate count.");
+      if (!Number.isInteger(payload.n) || payload.n < MIN_PLATES || payload.n > MAX_PLATES) throw new Error("Invalid plate count.");
 
       state.n = payload.n;
       state.name = typeof payload.name === "string" ? payload.name.slice(0, 80) : "";
@@ -966,7 +968,7 @@
       const parsed = Number(plateCount.value);
       if (!Number.isFinite(parsed)) return;
 
-      state.n = Math.max(1, Math.min(6, Math.trunc(parsed)));
+      state.n = Math.max(MIN_PLATES, Math.min(MAX_PLATES, Math.trunc(parsed)));
       plateCount.value = String(state.n);
       render();
       clearShareMessage();
@@ -987,6 +989,9 @@
 
     document.getElementById("shareBtn").addEventListener("click", createShareLink);
     document.getElementById("resetBtn").addEventListener("click", resetAll);
+
+    plateCount.min = String(MIN_PLATES);
+    plateCount.max = String(MAX_PLATES);
 
     initRepoLinks();
     loadGitHubStars();
