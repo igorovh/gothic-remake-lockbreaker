@@ -508,6 +508,7 @@
             <option>4</option>
             <option selected>5</option>
             <option>6</option>
+            <option>7</option>
           </select>
         </div>
       </div>
@@ -619,7 +620,7 @@
     }
 
     function normalizeStateForN() {
-      state.n = Math.max(1, Math.min(6, Number(state.n) || 5));
+      state.n = Math.max(1, Math.min(7, Number(state.n) || 5));
 
       for (let i = 1; i <= state.n; i++) {
         if (state.start[i] === undefined) state.start[i] = 0;
@@ -874,7 +875,7 @@
 
     function loadCompactSetup(payload) {
       if (!payload || payload.v !== 1) throw new Error("Unsupported setup format.");
-      if (!Number.isInteger(payload.n) || payload.n < 1 || payload.n > 6) throw new Error("Invalid plate count.");
+      if (!Number.isInteger(payload.n) || payload.n < 1 || payload.n > 7) throw new Error("Invalid plate count.");
 
       state.n = payload.n;
       state.name = typeof payload.name === "string" ? payload.name.slice(0, 80) : "";
